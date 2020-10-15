@@ -1,23 +1,19 @@
 import express from 'express'
+import path from 'path'
+import cors from 'cors'
 
 import './database/connection'
+import 'express-async-errors'
+
+import routes from './routes'
+import errorHandler from './errors/handler'
 
 const app = express()
 
+app.use(cors())
 app.use(express.json())
-
-// Rota = conjunto
-// Recurso = usuário
-
-// Metodos HTTP = GET, POST, PUT, DELETE
-// Parâmetros
-
-// Query params: htpp://localhost:3333/users?search=diego
-// Route params: htpp://localhost:3333/users/1 (identifcar um recurso)
-// Body: htpp://localhost:3333/users/1 (identifcar um recurso)
-
-app.get('/users', (request, response) => {
-	return response.json({ message: "Hellow World" })
-})
+app.use(routes);
+app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')))
+app.use(errorHandler)
 
 app.listen(3333)
